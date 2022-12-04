@@ -1,0 +1,33 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+:root{
+    --gill : Noto;
+    --margin: 5px;
+}
+
+*{
+    font-family: var(--gill);
+}
+svg{
+    margin: var(--margin);
+}
+.nine{  border-radius: 0% !important;}
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  td{
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  a:hover{
+    cursor: pointer !important;
+  }
