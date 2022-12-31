@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('profile');
             $table->string('code');
             $table->string('Noun');
-            $table->float('Address');
+            $table->string('Address');
             $table->float('Phone');
             $table->timestamps();
         });
