@@ -11,7 +11,7 @@
                     Back</a>
             </div>
             <div class="cold-md-8">
-                <h2 class="text-center mt-5" >Create new client</h2>
+                <h2 class="text-center mt-5" >Create new Employe</h2>
             </div>
         </div>
         <form class="form mt-5" method="post"  enctype="multipart/form-data">        

@@ -56,7 +56,7 @@ class almsController extends Controller
         }
 
         alms::create($input);
-        return back()->with('message', 'Client added');
+        return back()->with('message', 'Employe added');
     }
 
     /**

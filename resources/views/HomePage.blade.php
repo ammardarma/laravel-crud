@@ -3,7 +3,7 @@
 @section('content') 
 
 <div class="container w-75 my-5">
-<h2 class="text-center my-4 border">Manage Clients</h2>
+<h2 class="text-center my-4 border">Manage Employes</h2>
   <div class="d-flex flex-row-reverse">
 
 
@@ -16,13 +16,13 @@
   <path d="M1 1a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h.5a.5.5 0 0 0 .5-.5.5.5 0 0 1 1 0 .5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5.5.5 0 0 1 1 0 .5.5 0 0 0 .5.5h.5a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6.707L6 1.293A1 1 0 0 0 5.293 1H1Zm0 1h4.293L6 2.707A1 1 0 0 0 6.707 3H15v10h-.085a1.5 1.5 0 0 0-2.4-.63C11.885 11.223 10.554 10 8 10c-2.555 0-3.886 1.224-4.514 2.37a1.5 1.5 0 0 0-2.4.63H1V2Z"/>
 </svg>
 
-      + Clients</a>
+      + Employe</a>
   </div>
     <h4 class="text-center"> Total: {{ count($emps) }}</h4>
   <table class="table table-bordered">
   <thead class="thead">
     <tr>
-    <th scope="col" class='text-center'>Client N°</th>
+    <th scope="col" class='text-center'>Employe N°</th>
       <th scope="col">Profile</th>
       <th scope="col">Code</th>
       <th scope="col">Noun</th>
@@ -37,7 +37,6 @@
             <tr>
                 <td class='text-center'>{{ $employe->id }}</td>
                 <td class="text-center"><img src="/images/{{$employe->profile }}" width="150px" height="150px"></td>
-                <!-- <td>{{ $employe->code }}</td> -->
                 <td>{{ $employe['code'] }}</td>
                 <td>{{ $employe->Noun }}</td>
                 <td>{{ $employe->Address }}</td>
