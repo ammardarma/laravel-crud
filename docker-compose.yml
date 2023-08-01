@@ -1,0 +1,43 @@
+version: '3'
+services:
+
+  #Laravel App
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: localhost/laravel
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www/:z
+    networks:
+      - laravel
+      - apps
+
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/:z
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:z
+      - ./nginx/ssl/:/etc/nginx/ssl/:z
+    networks:
+      - apps
+
+networks:
+  apps:
+    driver: bridge
+  laravel:
+    external: true
