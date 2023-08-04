@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
+  namespcae: ahmed
   labels:
     tier: backend
 data:
@@ -11,7 +12,7 @@ data:
       error_log  /var/log/nginx/error.log;
       access_log /var/log/nginx/access.log;
       
-      root /code/app/public;
+      root /app/public;
       location / {
           try_files $uri $uri/ /index.php?$query_string;
       }

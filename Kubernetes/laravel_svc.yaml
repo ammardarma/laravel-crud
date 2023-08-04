@@ -6,7 +6,7 @@ metadata:
     tier: backend
 spec:
   selector:
-    app: laravel-app
+    layer: laravel
     tier: backend
   ports:
     - protocol: TCP

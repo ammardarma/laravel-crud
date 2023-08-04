@@ -18,9 +18,9 @@ spec:
         tier: backend
     spec:
       volumes:
-      - name: dir
-        hostPath:
-          path: /code
+      - name: laravel-app-pvc
+        persistentVolumeClaim:
+          claimName: laravel-pvc
       - name: config
         configMap:
           name: nginx-config
@@ -31,8 +31,8 @@ spec:
       - name: nginx
         image: nginx
         volumeMounts:
-        - name: dir
-          mountPath: /code
+        - name: laravel-app-pvc
+          mountPath: /app
         - name: config
           mountPath: /etc/nginx/conf.d
         ports:
