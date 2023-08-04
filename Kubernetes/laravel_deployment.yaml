@@ -1,0 +1,54 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '8'
+  name: laravel-in-kubernetes-fpm
+  namespace: ahmed
+  labels:
+    layer: laravel
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      layer: laravel
+      tier: backend
+  template:
+    metadata:
+      labels:
+        layer: laravel
+        tier: backend
+    spec:
+      volumes:
+        - name: laravel-app-pvc
+          persistentVolumeClaim:
+            claimName: laravel-pvc
+      containers:
+        - name: laravel
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: laravel-app-pvc
+              mountPath: /var/www/
+          envFrom:
+            - configMapRef:
+                name: laravel-env
+            - secretRef:
+                name: laravel-env
+          image: 'registry.i-3.my.id:5000/repository/docker-internal/ahmad/laravel'
+      imagePullSecrets:
+        - name: lab-nexus-ahmad
+      initContainers:
+      - name: install
+        image: busybox
+        volumeMounts:
+        - name: dir
+          mountPath: /code
+        command:
+        - cp
+        - "-r"
+        - "/var/www/."
+        - "/code/app"

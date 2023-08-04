@@ -27,14 +27,15 @@ RUN  docker-php-ext-configure gd \
     && docker-php-ext-install pdo_pgsql \
     && docker-php-source delete
 
-RUN usermod -u 1000 www-data
+#RUN usermod -u 1000 www-data
 
 COPY --chown=www-data:www-data . /var/www
 
 #COPY ./.env /var/www/.env
 
 # Install composer
-#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
 
 USER www-data
 
