@@ -3,7 +3,7 @@ apiVersion: apps/v1
 metadata:
   annotations:
     deployment.kubernetes.io/revision: '8'
-  name: laravel-in-kubernetes-fpm
+  name: laravel
   namespace: ahmed
   labels:
     layer: laravel
@@ -25,13 +25,8 @@ spec:
         - name: laravel-app-pvc
           persistentVolumeClaim:
             claimName: laravel-pvc
-        # Nginx Configuration Volume
-        # - name: config
-        #   configMap:
-        #     name: nginx-config
-        #     items:
-        #     - key: config
-        #       path: site.conf
+        - name: app
+          emptyDir:
       containers:
         # Laravel Containers
         - name: laravel
@@ -41,36 +36,26 @@ spec:
           imagePullPolicy: Always
           volumeMounts:
             - name: laravel-app-pvc
+              mountPath: /app/storage
+              subPath: storage
+            - name: laravel-app-pvc
               mountPath: /app
           envFrom:
             - configMapRef:
                 name: laravel-env
             - secretRef:
                 name: laravel-env
-          image: 'registry.i-3.my.id:5000/repository/docker-internal/ahmad/laravel'
-        # # Nginx Container
-        # - name: nginx
-        #   image: nginx
-        #   volumeMounts:
-        #   - name: laravel-app-pvc
-        #     mountPath: /app
-        #   - name: config
-        #     mountPath: /etc/nginx/conf.d
-        #   ports:
-        #   - containerPort: 80
-        #     name: http
-        #     protocol: TCP
+          image: 'registry.i-3.my.id:5000/repository/docker-internal/ahmad/laravel:1.2'
       imagePullSecrets:
         - name: lab-nexus-ahmad
       initContainers:
       - name: install
-        image: busybox
+        image: registry.i-3.my.id:5000/repository/docker-internal/ahmad/laravel:1.2
         volumeMounts:
         - name: laravel-app-pvc
           mountPath: /app
         command:
         - cp
-        - "-n"
         - "-r"
         - "/var/www/."
-        - "/app/"
+        - "/app"

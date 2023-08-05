@@ -1,3 +1,8 @@
+FROM composer as builder
+WORKDIR /app/
+COPY . ./
+RUN composer install
+
 FROM php:8.1-fpm
 
 WORKDIR /var/www/
@@ -27,19 +32,11 @@ RUN  docker-php-ext-configure gd \
     && docker-php-ext-install pdo_pgsql \
     && docker-php-source delete
 
-#RUN usermod -u 1000 www-data
-
 COPY --chown=www-data:www-data . /var/www
 
-#COPY ./.env /var/www/.env
-
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install
+COPY --from=builder /app/vendor /var/www/vendor
 
 USER www-data
-
-#RUN php artisan key:generate 
 
 EXPOSE 9000
 CMD ["php-fpm"]
