@@ -35,11 +35,9 @@ COPY --chown=www-data:www-data . /var/www
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-# RUN composer install
+RUN composer install
 
 USER www-data
-
-RUN composer install
 
 #RUN php artisan key:generate 
 
