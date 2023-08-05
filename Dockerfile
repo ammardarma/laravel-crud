@@ -41,7 +41,7 @@ USER www-data
 
 RUN composer install
 
-//RUN php artisan key:generate 
+#RUN php artisan key:generate 
 
 EXPOSE 9000
 CMD ["php-fpm"]
