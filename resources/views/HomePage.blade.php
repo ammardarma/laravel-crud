@@ -3,7 +3,7 @@
 @section('content') 
 
 <div class="container w-75 my-5">
-<h2 class="text-center my-4 border">Manage Employes 2</h2>
+<h2 class="text-center my-4 border">Manage Employes Versi 1.2.1</h2>
   <div class="d-flex flex-row-reverse">
 
 
