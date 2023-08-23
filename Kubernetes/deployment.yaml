@@ -3,8 +3,8 @@ apiVersion: apps/v1
 metadata:
   annotations:
     deployment.kubernetes.io/revision: '8'
-  name: laravel
-  namespace: ahmed
+  name: laravel-vue
+  #namespace: ahmed
   labels:
     layer: laravel
     tier: backend
@@ -22,22 +22,22 @@ spec:
     spec:
       volumes:
         # Laravel Source Code Volume
-        - name: laravel-app-pvc
+        - name: laravel-volume
           persistentVolumeClaim:
             claimName: laravel-pvc
+        - name: app
+          emptyDir:
       containers:
         # Laravel Containers
         - name: laravel
           ports:
-            - containerPort: 9000
+            - containerPort: 8080
               protocol: TCP
           imagePullPolicy: Always
           volumeMounts:
-            - name: laravel-app-pvc
-              mountPath: /app/storage
+            - name: laravel-volume
+              mountPath: /var/www/storage
               subPath: storage
-            - name: laravel-app-pvc
-              mountPath: /app
           image: 'docker.io/ahmademje/php-oci8'
       imagePullSecrets:
         - name: ahmad-pull-secret

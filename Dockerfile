@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
         zip \
         curl \
         unzip \
+	nginx \
 	vim \
 	php8.2-common/stable php8.2-xml/stable php8.2-opcache/stable php8.2-readline/stable \
 	php8.2-dev/stable php-cli/stable php-common/stable php-xml/stable \
@@ -35,26 +36,36 @@ RUN curl -o instantclient-basic-193000.zip  https://download.oracle.com/otn_soft
 
 ENV LD_LIBRARY_PATH /usr/lib/oracle/instantclient_19_20
 
-RUN docker-php-ext-install zip 
-#RUN docker-php-ext-install mysqli pdo pdo_mysql 
-RUN docker-php-ext-install pdo_mysql
-#RUN docker-php-ext-install tokenizer 
-RUN docker-php-ext-install bcmath 
-RUN docker-php-ext-install opcache 
-RUN docker-php-ext-install pcntl
-RUN docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/oracle/instantclient_19_20
-RUN docker-php-ext-install -j$(nproc) oci8 
-    # Install the PHP gd library
-RUN docker-php-ext-configure gd \
+RUN docker-php-ext-install zip \
+	&& docker-php-ext-install pdo_mysql \
+	&& docker-php-ext-install bcmath \
+	&& docker-php-ext-install opcache \
+	&& docker-php-ext-install pcntl \
+	&& docker-php-ext-configure oci8 --with-oci8=instantclient,/usr/lib/oracle/instantclient_19_20 \
+	&& docker-php-ext-install -j$(nproc) oci8 \
+    	# Install the PHP gd library
+	&& docker-php-ext-configure gd \
         --with-jpeg=/usr/lib \
-        --with-freetype=/usr/include/freetype2 && \
-        docker-php-ext-install gd
+        --with-freetype=/usr/include/freetype2 \
+        && docker-php-ext-install gd
 
 COPY --chown=www-data:www-data . /var/www
+COPY --from=builder /app/vendor ./vendor
 
-COPY --from=builder /app/vendor /var/www/vendor
+RUN mkdir /run/php && \
+    mkdir /run/nginx && \
+    chown -R www-data:www-data /run/php && \
+    chown -R www-data:www-data /run/nginx && \
+    chown -R www-data:www-data /var/lib/nginx
+
+COPY ./default /etc/nginx/sites-enabled/default
+COPY ./zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./docker-php-entrypoint /usr/local/bin/docker-php-entrypoint
+
+RUN cp .env.example .env && php artisan key:generate
 
 USER www-data
 
-EXPOSE 9000
+EXPOSE 80
 CMD ["php-fpm"]

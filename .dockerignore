@@ -3,7 +3,7 @@
 **.gitignore
 **.gitattributes
 **.sass-cache
-*.env*
+*.env
 storage/app/*
 storage/framework/cache/*
 storage/framework/sessions/*
