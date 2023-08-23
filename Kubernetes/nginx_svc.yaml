@@ -1,17 +1,17 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: nginx
+  name: laravel
   labels:
     tier: backend
-    app: nginx
+    layer: laravel
 spec:
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8080
+      targetPort: 8080
       #nodePort: 32380
   selector:
     tier: backend
-    app: nginx
-  #type: LoadBalancer
+    layer: laravel
+  type: NodePort

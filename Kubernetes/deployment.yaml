@@ -20,13 +20,13 @@ spec:
         layer: laravel
         tier: backend
     spec:
+      securityContext:
+        fsGroup: 33
       volumes:
         # Laravel Source Code Volume
         - name: laravel-volume
           persistentVolumeClaim:
             claimName: laravel-pvc
-        - name: app
-          emptyDir:
       containers:
         # Laravel Containers
         - name: laravel
@@ -38,6 +38,36 @@ spec:
             - name: laravel-volume
               mountPath: /var/www/storage
               subPath: storage
+            - name: laravel-volume
+              mountPath: /var/www/storage/app
+              subPath: app
+            - name: laravel-volume
+              mountPath: /var/www/storage/framework/cache
+              subPath: cache
+            - name: laravel-volume
+              mountPath: /var/www/storage/framework/cache/data
+              subPath: data
+            - name: laravel-volume
+              mountPath: /var/www/storage/framework/sessions
+              subPath: sessions
+            - name: laravel-volume
+              mountPath: /var/www/storage/framework/testing
+              subPath: testing
+            - name: laravel-volume
+              mountPath: /var/www/storage/framework/views
+              subPath: views
+            - name: laravel-volume
+              mountPath: /var/www/storage/logs
+              subPath: logs
           image: 'docker.io/ahmademje/php-oci8'
+      initContainers:
+        - name: initcontainer # Or replace the name
+          image: alpine:latest
+          command: ["/bin/sh", "-c"]
+          args:
+          - chown 33:33 storage; # Replace UID and GID with values from the Dockerfile
+          volumeMounts:
+          - name: laravel-volume  # Or you can replace with any name
+            mountPath: /storage # Must match the mount path in the args line
       imagePullSecrets:
         - name: ahmad-pull-secret
